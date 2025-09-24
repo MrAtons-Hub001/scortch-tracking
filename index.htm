@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>ScortchSales — Track Your Order</title>
+  <style>
+    body {margin:0;font-family:system-ui,Segoe UI,Roboto,Arial;background:#fafafa;color:#111;}
+    header {background:#e53935;color:#fff;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;}
+    header h1 {margin:0;font-size:18px;}
+    nav {display:flex;gap:12px;}
+    nav button {background:#fff;color:#e53935;border:none;padding:8px 14px;border-radius:8px;font-weight:600;cursor:pointer;}
+    nav button:hover {background:#ffe5e5;}
+    main {max-width:920px;margin:40px auto;padding:0 20px;text-align:center;}
+    h2 {font-size:22px;margin-bottom:20px;}
+    .track-row {display:flex;justify-content:center;gap:8px;align-items:center;margin-bottom:18px;}
+    input[type="text"] {padding:10px;width:420px;border-radius:6px;border:1px solid #ccc;}
+    input[type="button"] {padding:10px 20px;border:none;border-radius:6px;background:#e53935;color:#fff;font-weight:600;cursor:pointer;}
+    input[type="button"]:hover {background:#c62828;}
+    .warn {display:none;margin-top:18px;color:#b71c1c;background:#fff0f0;padding:12px;border-radius:8px;border:1px solid #ffdede;max-width:760px;margin-left:auto;margin-right:auto;}
+    /* modal styles */
+    .modal {display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);align-items:center;justify-content:center;}
+    .modal-content {background:#fff;padding:24px;border-radius:12px;max-width:320px;text-align:center;box-shadow:0 4px 16px rgba(0,0,0,.2);}
+    .modal-content h3 {margin-top:0;}
+    .close-btn {margin-top:16px;background:#e53935;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ScortchSales</h1>
+    <nav>
+      <button onclick="openModal('Home')">Home</button>
+      <button onclick="openModal('Cart')">Cart</button>
+      <button onclick="openModal('Account')">Account</button>
+      <button onclick="openModal('Promo')">Today's Promo</button>
+    </nav>
+  </header>
+
+  <main>
+    <h2>Track Your Order</h2>
+
+    <div class="track-row">
+      <input type="text" id="YQNum" maxlength="50" placeholder="Enter tracking number (e.g. SF123456789)"/>
+      <input type="button" value="TRACK" id="trackBtn"/>
+    </div>
+
+    <div id="widget-area"><!-- 17TRACK floating results will appear near the input --></div>
+
+    <div class="warn" id="warn">
+      The tracking widget failed to load. If you opened this file from your computer (file://), please serve it via HTTP(S) — upload to GitHub Pages or run a local web server. See instructions below.
+    </div>
+  </main>
+
+  <!-- modal -->
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <h3 id="modal-title"></h3>
+      <p>Page currently unavailable — under maintenance.</p>
+      <button class="close-btn" onclick="closeModal()">OK</button>
+    </div>
+  </div>
+
+  <!-- load 17TRACK explicitly over HTTPS -->
+  <script type="text/javascript" src="https://www.17track.net/externalcall.js"></script>
+  <script type="text/javascript">
+    function doTrack() {
+      var num = document.getElementById("YQNum").value.trim();
+      if(num === ""){
+        alert("Enter your number.");
+        return;
+      }
+      // the official floating widget
+      YQV5.trackSingleF2({
+        YQ_ElementId: "YQNum",
+        YQ_Width: 770,
+        YQ_Height: 560,
+        YQ_Fc: "0",
+        YQ_Lang: "en",
+        YQ_Num: num
+      });
+    }
+
+    // hook up the button (and allow Enter key)
+    document.getElementById('trackBtn').addEventListener('click', doTrack);
+    document.getElementById('YQNum').addEventListener('keydown', function(e){
+      if(e.key === 'Enter') doTrack();
+    });
+
+    // modal functions
+    function openModal(title){
+      document.getElementById('modal-title').innerText = title;
+      document.getElementById('modal').style.display = 'flex';
+    }
+    function closeModal(){
+      document.getElementById('modal').style.display = 'none';
+    }
+    window.onclick = function(event){
+      const modal = document.getElementById('modal');
+      if(event.target === modal){ closeModal(); }
+    }
+
+    // Check that the 17track object loaded; if not, show a hint
+    window.addEventListener('load', function(){
+      setTimeout(function(){
+        if(typeof window.YQV5 === 'undefined'){
+          document.getElementById('warn').style.display = 'block';
+          console.warn('17TRACK script did not load. Serve this page via HTTPS or publish to GitHub Pages.');
+        }
+      }, 900);
+    });
+  </script>
+</body>
+</html>
