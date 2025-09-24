@@ -1,233 +1,119 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>ScortchSales — Track Your Order</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Track Your Order</title>
   <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      margin: 0;
-      font-family: system-ui, Segoe UI, Roboto, Arial, sans-serif;
-      background: #fafafa;
-      color: #111;
-    }
-
-    /* HEADER */
-    header {
-      background: #e53935;
-      color: #fff;
-      padding: 12px 20px;
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
-      flex-wrap: wrap;
+      min-height: 100vh;
     }
 
-    header h1 {
-      margin: 0;
-      font-size: 18px;
-    }
-
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    nav button {
+    .container {
+      max-width: 600px;
+      width: 100%;
       background: #fff;
-      color: #e53935;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      flex: 1 1 auto;
-    }
-
-    nav button:hover {
-      background: #ffe5e5;
-    }
-
-    /* MAIN */
-    main {
-      max-width: 920px;
-      margin: 40px auto;
-      padding: 0 16px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       text-align: center;
     }
 
-    h2 {
-      font-size: 22px;
+    h1 {
+      font-size: 1.6rem;
       margin-bottom: 20px;
+      color: #222;
     }
 
-    .track-row {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      align-items: center;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
-
-    input[type="text"] {
-      padding: 10px;
+    #YQNum {
       width: 100%;
-      max-width: 420px;
-      border-radius: 6px;
+      padding: 12px;
+      font-size: 16px;
       border: 1px solid #ccc;
-      flex: 1 1 auto;
+      border-radius: 8px;
+      margin-bottom: 15px;
     }
 
     input[type="button"] {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
-      background: #e53935;
+      background: #ff4b2b;
       color: #fff;
-      font-weight: 600;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 8px;
       cursor: pointer;
-      flex: 0 0 auto;
+      transition: background 0.3s;
+      width: 100%;
     }
 
     input[type="button"]:hover {
-      background: #c62828;
+      background: #e84321;
     }
 
-    #YQContainer {
+    /* Widget container to make it responsive */
+    #widget-container {
       margin-top: 20px;
       width: 100%;
+      overflow-x: auto;
     }
 
-    /* MODAL */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,.6);
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .modal-content {
-      background: #fff;
-      padding: 24px;
-      border-radius: 12px;
-      max-width: 320px;
-      text-align: center;
-      box-shadow: 0 4px 16px rgba(0,0,0,.2);
-    }
-
-    .modal-content h3 {
-      margin-top: 0;
-    }
-
-    .close-btn {
-      margin-top: 16px;
-      background: #e53935;
-      color: #fff;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 600px) {
-      header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      nav {
-        width: 100%;
-        justify-content: flex-start;
-      }
-
-      .track-row {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      input[type="text"], input[type="button"] {
-        width: 100%;
-        max-width: 100%;
-      }
-
-      input[type="button"] {
-        margin-top: 8px;
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.3rem;
       }
     }
   </style>
 </head>
 <body>
-  <!-- HEADER -->
-  <header>
-    <h1>ScortchSales</h1>
-    <nav>
-      <button onclick="openModal('Home')">Home</button>
-      <button onclick="openModal('Cart')">Cart</button>
-      <button onclick="openModal('Account')">Account</button>
-      <button onclick="openModal('Promo')">Today's Promo</button>
-    </nav>
-  </header>
+  <div class="container">
+    <h1>Track Your Order</h1>
 
-  <!-- MAIN -->
-  <main>
-    <h2>Track Your Order</h2>
-    <div class="track-row">
-      <input type="text" id="YQNum" maxlength="50" placeholder="Enter tracking number"/>
-      <input type="button" value="TRACK" onclick="doTrack()"/>
-    </div>
-    <div id="YQContainer"></div>
-  </main>
+    <!-- Input + Button -->
+    <input type="text" id="YQNum" maxlength="50" placeholder="Enter your tracking number"/>
+    <input type="button" value="TRACK" onclick="doTrack()"/>
 
-  <!-- MODAL -->
-  <div class="modal" id="modal">
-    <div class="modal-content">
-      <h3 id="modal-title"></h3>
-      <p>Page currently unavailable — under maintenance.</p>
-      <button class="close-btn" onclick="closeModal()">OK</button>
-    </div>
+    <!-- Widget container -->
+    <div id="widget-container"></div>
   </div>
 
-  <!-- 17TRACK script -->
-  <script src="//www.17track.net/externalcall.js"></script>
-  <script>
-    // TRACKING FUNCTION
+  <!-- 17Track Script -->
+  <script type="text/javascript" src="//www.17track.net/externalcall.js"></script>
+  <script type="text/javascript">
     function doTrack() {
       var num = document.getElementById("YQNum").value;
       if(num===""){
-        alert("Enter your number.");
-        return;
+          alert("Enter your number.");
+          return;
       }
       YQV5.trackSingleF2({
-        YQ_ContainerId:"YQContainer",  // results show inside this div
-        YQ_Width:"100%",               // make widget responsive
-        YQ_Height:560,
-        YQ_Fc:"0",
-        YQ_Lang:"en",
-        YQ_Num:num
+          // Required, Specify the element ID of the floating position.
+          YQ_ElementId:"YQNum",
+          // Optional, specify the tracking result width, min width 260px, default is 470px.
+          YQ_Width:770,
+          // Optional, specify tracking result height, max height 800px, default is 560px.
+          YQ_Height:560,
+          // Optional, select carrier, default to auto identify.
+          YQ_Fc:"0",
+          // Optional, specify UI language, default language is automatically detected based on the browser settings.
+          YQ_Lang:"en",
+          // Required, specify the number needed to be tracked.
+          YQ_Num:num
       });
-    }
-
-    // MODAL FUNCTIONS
-    function openModal(title){
-      document.getElementById('modal-title').innerText = title;
-      document.getElementById('modal').style.display = 'flex';
-    }
-    function closeModal(){
-      document.getElementById('modal').style.display = 'none';
-    }
-    window.onclick = function(event){
-      const modal = document.getElementById('modal');
-      if(event.target === modal){ closeModal(); }
     }
   </script>
 </body>
