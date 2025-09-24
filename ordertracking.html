@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>ScortchSales — Track Your Order</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;margin:0;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;height:100vh;padding:20px}
+    .card{max-width:540px;width:100%;border-radius:12px;padding:22px;box-shadow:0 6px 24px rgba(0,0,0,.08);border:1px solid #eee}
+    h1{margin:0 0 8px;font-size:20px}
+    p{margin:0 0 16px;color:#444}
+    input{width:100%;padding:12px;border-radius:8px;border:1px solid #ddd;margin-bottom:12px;font-size:16px}
+    .row{display:flex;gap:8px}
+    button{flex:1;padding:12px;border-radius:8px;border:0;background:#e53935;color:#fff;font-weight:600;cursor:pointer}
+    small{display:block;margin-top:12px;color:#777}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Track your ScortchSales order</h1>
+    <p>Enter your AWB/tracking number below and click Track.</p>
+
+    <input id="awb" placeholder="e.g. SF123456789" autocomplete="off"/>
+
+    <div class="row">
+      <button id="track">Track</button>
+    </div>
+
+    <small>Tip: you can also use a link we sent you: it may auto-open this page with your AWB filled.</small>
+  </div>
+
+  <script>
+    function goTrack(awb){
+      if(!awb) return alert('Please enter your tracking number (AWB).');
+      // Primary: open 17TRACK with the tracking number (works for Speedaf)
+      const url17 = 'https://www.17track.net/en?nums=' + encodeURIComponent(awb);
+      // Fallback: Speedaf official site (opens their tracking page)
+      const urlSpeedaf = 'https://www.speedaf.com/';
+      // Try 17track first (universal), then if needed the user can click Speedaf.
+      window.open(url17, '_blank');
+    }
+
+    document.getElementById('track').addEventListener('click', ()=>{
+      const awb = document.getElementById('awb').value.trim();
+      goTrack(awb);
+    });
+
+    // If user came with ?awb= parameter, auto-redirect
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      const awbParam = params.get('awb') || params.get('tracking') || params.get('t');
+      if(awbParam){
+        document.getElementById('awb').value = awbParam;
+        // small delay so user sees the page, then open tracker
+        setTimeout(()=> goTrack(awbParam), 500);
+      }
+    })();
+  </script>
+</body>
+</html>
